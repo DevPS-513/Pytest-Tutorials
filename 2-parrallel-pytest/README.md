@@ -23,6 +23,12 @@ plugins: xdist-3.8.0, bdd-8.1.0
 
 ```
 
+This example confines to 2 workers , this can be changed to auto, or any number of workers in the pytest.ini file
+
+```
+
+[pytest]
+addopts = --dist=loadgroup -n=2
 
 ```
 python -m  pytest ./validation/scenarios.py -k food

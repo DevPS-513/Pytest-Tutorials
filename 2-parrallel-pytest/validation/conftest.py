@@ -11,9 +11,12 @@ pytest_plugins = [
 def session_setup():
     print("\n>>> session_setup fixture called")
 
-
+@pytest.hookimpl(tryfirst=True)
 def pytest_collection_modifyitems(items):
     """Automatically group non-parallel_safe tests onto a single worker."""
+    print(f">>>>pytest_collection_modifyitems{items}")
+
     for item in items:
         if not item.get_closest_marker("parallel_safe"):
-            item.add_marker(pytest.mark.xdist_group("serial"))
+            item.add_marker(pytest.mark.xdist_group("serial"))	
+            print(f">>>>>>>> add serial to{item}")

@@ -1,9 +1,20 @@
 
 ## A simple example of running pytest in parallel using xdist
 
-Example where a normal pytest command takes 5 seconds to run, but running in parallel takes only 2.7 seconds.
+Example where a normal pytest command takes 5 seconds to run, but running in parallel takes only 2.7 seconds. Overall steps are when in the root dir could be something along the lines of:
 
 ```
+deactivate
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt 
+```
+
+after which -n and other such arguments are available to pytest , also --dist=loadscope   # keeps same module/class on same worker (more stable)
+
+
+```
+python -m  pytest -n 4 ./validation/scenarios.py -k food
 plugins: xdist-3.8.0, bdd-8.1.0
 4 workers [4 items]     
 ....                                                                        [100%]

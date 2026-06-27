@@ -50,34 +50,15 @@ Here are common options for running pytest in parallel using the `xdist` plugin.
 --dist=no          # disables distribution (serial), even with -n set
 ```
 
-**Output:**
-```bash
--s             # show print() output from tests
--v             # verbose — show each test name
--v --tb=short  # shorter tracebacks on failure
+if  --dist=loadscope is kept in the ini file, and adding these lines to the conftest 
+
+```
+def pytest_collection_modifyitems(items):
+    """Automatically group non-parallel_safe tests onto a single worker."""
+    for item in items:
+        if not item.get_closest_marker("parallel_safe"):
+            item.add_marker(pytest.mark.xdist_group("serial"))
+
 ```
 
-**Filtering (works same as without xdist):**
-```bash
--m parallel_safe          # only marked tests
--m "not parallel_safe"    # exclude marked tests
--k food                   # keyword match
-```
-
-**Failure control:**
-```bash
--x             # stop on first failure
---max-fail=2   # stop after 2 failures
-```
-
-**Combining them:**
-```bash
-python -m pytest -n auto --dist=loadscope -v -m parallel_safe ./validation/scenarios.py
-```
-
-**Most useful for your setup right now:**
-```bash
-python -m pytest -n auto --dist=loadfile -v -s ./validation/scenarios.py
-```
-
-`--dist=loadfile` is the safest choice since your BDD scenarios are split across feature files.
+it will make it so you only have to tag a test that is parrallel_safe in order to run it
